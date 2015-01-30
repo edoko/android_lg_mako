@@ -351,10 +351,10 @@ CC		= $(srctree)/scripts/gcc-wrapper.py $(REAL_CC)
 
 CHECKFLAGS     := -D__linux__ -Dlinux -D__STDC__ -Dunix -D__unix__ \
 		  -Wbitwise -Wno-return-void $(CF)
-CFLAGS_MODULE   = -DMODULE -O2 -mcpu=cortex-a15 -mfpu=neon -march=armv7-a -mtune=cortex-a15 -funswitch-loops -fpredictive-commoning -fgcse-after-reload -ftree-vectorize -fipa-cp-clone -fsingle-precision-constant -pipe
+CFLAGS_MODULE   =
 AFLAGS_MODULE   =
-LDFLAGS_MODULE  =
-CFLAGS_KERNEL	= -O2 -mcpu=cortex-a15 -mfpu=neon -march=armv7-a -mtune=cortex-a15 -funswitch-loops -fpredictive-commoning -fgcse-after-reload -ftree-vectorize -fipa-cp-clone -fsingle-precision-constant -pipe
+LDFLAGS_MODULE  = --strip-debug
+CFLAGS_KERNEL	=
 AFLAGS_KERNEL	=
 CFLAGS_GCOV	= -fprofile-arcs -ftest-coverage
 
@@ -368,17 +368,17 @@ LINUXINCLUDE    := -I$(srctree)/arch/$(hdr-arch)/include \
 
 KBUILD_CPPFLAGS := -D__KERNEL__
 
-KBUILD_CFLAGS   := -Wall -Wundef -Wstrict-prototypes -Wno-trigraphs \
+KBUILD_CFLAGS   := -Wall -Wno-maybe-uninitialized -Wundef -Wstrict-prototypes -Wno-trigraphs \
 		   -fno-strict-aliasing -fno-common \
 		   -Werror-implicit-function-declaration \
 		   -Wno-format-security \
 		   -fno-delete-null-pointer-checks \
-			 -fmodulo-sched -fmodulo-sched-allow-regmoves \
-			 -funswitch-loops -fpredictive-commoning -fgcse-after-reload \
-			 -mfpu=neon -mcpu=cortex-a15 -march=armv7-a -mtune=cortex-a15 \
-			 -mno-unaligned-access -pipe
+			 -mfpu=neon-vfpv4 -march=armv7-a -mtune=cortex-a15 \
+		   -mno-unaligned-access -O2 -fno-pic -pipe \
+			 --param l1-cache-size=32 --param l1-cache-line-size=32 --param l2-cache-size=1024
+
 KBUILD_AFLAGS_KERNEL :=
-KBUILD_CFLAGS_KERNEL := -O2 -mcpu=cortex-a15 -mfpu=neon -march=armv7-a -mtune=cortex-a15 -funswitch-loops -fpredictive-commoning -fgcse-after-reload -ftree-vectorize -fipa-cp-clone -fsingle-precision-constant -pipe
+KBUILD_CFLAGS_KERNEL :=
 KBUILD_AFLAGS   := -D__ASSEMBLY__
 KBUILD_AFLAGS_MODULE  := -DMODULE
 KBUILD_CFLAGS_MODULE  := -DMODULE
